@@ -30,5 +30,9 @@ data class Film(
                 posterPath = "poster path"
             )
         }
+
+        fun listExample(size: Int): List<Film> {
+            return List(size) { example() }
+        }
     }
 }

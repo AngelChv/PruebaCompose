@@ -23,13 +23,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FilmManagerApp()
+            MainNavHost()
         }
     }
 }
 
 @Composable
-fun FilmManagerApp() {
+fun MainNavHost() {
     val navController = rememberNavController()
     // Evitar que haya varias instancias del viewModel pasando la misma manualmente a las pantallas.
     val filmViewModel: FilmViewModel = viewModel()
@@ -76,5 +76,5 @@ fun FilmManagerApp() {
 @Preview
 @Composable
 fun PreviewApp() {
-    FilmManagerApp()
+    MainNavHost()
 }

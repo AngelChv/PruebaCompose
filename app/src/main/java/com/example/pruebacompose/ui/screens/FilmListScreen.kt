@@ -61,7 +61,7 @@ fun FilmListScreen(
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Añadir Película")
             }
-        }
+        },
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             // Usamos el import correcto de items para iterar la lista de películas.
@@ -96,6 +96,8 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun FilmListPreview() {
+    val viewModel: FilmViewModel = viewModel()
+    viewModel.setFilms(Film.listExample(10))
     FilmListScreen(rememberNavController(), viewModel()) { }
 }
 

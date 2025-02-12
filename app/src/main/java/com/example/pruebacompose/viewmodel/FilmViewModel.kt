@@ -30,6 +30,10 @@ class FilmViewModel : ViewModel() {
         _currentFilm.value = newFilm.copy()
     }
 
+    fun setFilms(films: List<Film>) {
+        _films.value = films
+    }
+
     fun loadFilms() {
         viewModelScope.launch {
             try {

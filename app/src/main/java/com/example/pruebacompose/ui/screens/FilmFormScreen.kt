@@ -1,9 +1,9 @@
 package com.example.pruebacompose.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,7 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,13 +40,13 @@ import com.example.pruebacompose.viewmodel.FilmViewModel
 fun FilmFormScreen(
     viewModel: FilmViewModel, navController: NavController, film: Film? = null
 ) {
-    var title by remember { mutableStateOf(film?.title ?: "") }
-    var director by remember { mutableStateOf(film?.director ?: "") }
-    var year by remember { mutableStateOf("${film?.year ?: ""}") }
-    var duration by remember { mutableStateOf("${film?.duration ?: ""}") }
-    var description by remember { mutableStateOf(film?.description ?: "") }
-    var posterPath by remember { mutableStateOf(film?.posterPath ?: "") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var title by rememberSaveable { mutableStateOf(film?.title ?: "") }
+    var director by rememberSaveable { mutableStateOf(film?.director ?: "") }
+    var year by rememberSaveable { mutableStateOf("${film?.year ?: ""}") }
+    var duration by rememberSaveable { mutableStateOf("${film?.duration ?: ""}") }
+    var description by rememberSaveable { mutableStateOf(film?.description ?: "") }
+    var posterPath by rememberSaveable { mutableStateOf(film?.posterPath ?: "") }
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
     val isEditing = film != null
 
     fun validateInt(value: String): Boolean {
@@ -83,26 +83,32 @@ fun FilmFormScreen(
         }
     }
 
-    Scaffold(topBar = {
-        TopAppBar(title = {
-            Text(
-                if (isEditing) "Editar película"
-                else "Crear Película"
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        if (isEditing) "Editar película"
+                        else "Crear Película"
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                    }
+                },
             )
-        }, navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = ::onSubmitForm, modifier = Modifier.padding(16.dp)
+            ) {
+                if (isEditing) Icon(Icons.Default.Edit, contentDescription = "Editar")
+                else Icon(Icons.Default.Add, contentDescription = "Crear")
             }
-        })
-    }, floatingActionButton = {
-        FloatingActionButton(
-            onClick = ::onSubmitForm, modifier = Modifier.padding(16.dp)
-        ) {
-            if (isEditing) Icon(Icons.Default.Edit, contentDescription = "Editar")
-            else Icon(Icons.Default.Add, contentDescription = "Crear")
-        }
-    }) { paddingValues ->
-        Column(
+        },
+    ) { paddingValues ->
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(16.dp)
@@ -110,32 +116,34 @@ fun FilmFormScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OutlinedTextField(value = title,
-                onValueChange = { title = it },
-                label = { Text("Título") })
-            OutlinedTextField(value = director,
-                onValueChange = { director = it },
-                label = { Text("Director") })
-            OutlinedTextField(
-                value = year,
-                onValueChange = { year = it },
-                label = { Text("Año") },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-            )
-            OutlinedTextField(
-                value = duration,
-                onValueChange = { duration = it },
-                label = { Text("Duración (min)") },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-            )
-            OutlinedTextField(value = description,
-                onValueChange = { description = it },
-                label = { Text("Descripción") })
-            OutlinedTextField(value = posterPath,
-                onValueChange = { posterPath = it },
-                label = { Text("URL del Poster (opcional)") })
+            item {
+                OutlinedTextField(value = title,
+                    onValueChange = { title = it },
+                    label = { Text("Título") })
+                OutlinedTextField(value = director,
+                    onValueChange = { director = it },
+                    label = { Text("Director") })
+                OutlinedTextField(
+                    value = year,
+                    onValueChange = { year = it },
+                    label = { Text("Año") },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(
+                    value = duration,
+                    onValueChange = { duration = it },
+                    label = { Text("Duración (min)") },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                )
+                OutlinedTextField(value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Descripción") })
+                OutlinedTextField(value = posterPath,
+                    onValueChange = { posterPath = it },
+                    label = { Text("URL del Poster (opcional)") })
 
-            errorMessage?.let { Text(it, color = Color.Red) }
+                errorMessage?.let { Text(it, color = Color.Red) }
+            }
         }
     }
 }
