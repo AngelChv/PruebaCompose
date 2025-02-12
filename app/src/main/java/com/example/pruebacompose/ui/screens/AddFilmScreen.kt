@@ -46,11 +46,17 @@ fun AddFilmScreen(
     var posterPath by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    fun validateInt(value: String): Boolean {
+        return value.isNotBlank() && value.toIntOrNull() != null
+    }
+
+    fun validate(): Boolean {
+        return title.isNotBlank() && director.isNotBlank() &&
+                description.isNotBlank() && validateInt(year) && validateInt(duration)
+    }
 
     fun onSubmitForm() {
-        if (title.isNotBlank() && director.isNotBlank() && year.isNotBlank() &&
-            duration.isNotBlank() && description.isNotBlank()
-        ) {
+        if (validate()) {
             viewModel.createFilm(FilmCreate(title = title,
                 director = director,
                 year = year.toInt(),
@@ -64,21 +70,17 @@ fun AddFilmScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Añadir Película") }, navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
-                }
-            })
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = ::onSubmitForm,
-                modifier = Modifier.padding(16.dp)
-            ) { Icon(Icons.Default.Add, contentDescription = "Crear") }
-        }
-    ) { paddingValues ->
+    Scaffold(topBar = {
+        TopAppBar(title = { Text("Añadir Película") }, navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+            }
+        })
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = ::onSubmitForm, modifier = Modifier.padding(16.dp)
+        ) { Icon(Icons.Default.Add, contentDescription = "Crear") }
+    }) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)

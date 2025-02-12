@@ -42,4 +42,30 @@ class FilmViewModel : ViewModel() {
             }
         }
     }
+
+    fun updateFilm(film: Film, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.updateFilm(film)
+            result.onSuccess {
+                onSuccess()
+                // Se puede hacer de otra manera más eficiente.
+                loadFilms()
+            }.onFailure { error ->
+                onError(error.message ?: "Error desconocido")
+            }
+        }
+    }
+
+    fun deleteFilm(filmId: Int, onSuccess: () -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.deleteFilm(filmId)
+            result.onSuccess {
+                onSuccess()
+                // Se puede hacer de otra manera más eficiente.
+                loadFilms()
+            }.onFailure { error ->
+                onError(error.message ?: "Error desconocido")
+            }
+        }
+    }
 }

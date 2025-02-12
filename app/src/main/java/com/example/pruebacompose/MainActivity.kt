@@ -69,7 +69,7 @@ fun FilmManagerApp() {
             filmJson?.let {
                 //val film = Json.decodeFromString<Film>(it)
                 val film = jsonToFilm(it)
-                FilmDetailScreen(film = film)
+                FilmDetailScreen(navController, film = film)
             }
         }
 
