@@ -15,5 +15,4 @@ interface ApiService {
     @Headers("Content-type: application/json")
     @POST("films/create")
     suspend fun createFilm(@Body film: FilmCreate): Response<Int>
-
 }

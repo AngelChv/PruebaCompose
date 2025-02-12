@@ -21,9 +21,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
@@ -78,8 +80,8 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         onClick = { onFilmClick(film) },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Se usan tipografías de Material3: titleLarge en lugar de h6
@@ -88,4 +90,25 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
             Text(text = "Año: ${film.year}", style = MaterialTheme.typography.bodyMedium)
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FilmListPreview() {
+    FilmListScreen(rememberNavController()) { }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FilmItemPreview() {
+    val film = Film(
+        id = 0,
+        title = "Título",
+        director = "Director",
+        year = 1999,
+        duration = 130,
+        description = "Descripción",
+        posterPath = "poster path"
+    )
+    FilmItem(film) { }
 }
