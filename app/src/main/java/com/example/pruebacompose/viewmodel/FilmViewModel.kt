@@ -13,13 +13,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class FilmViewModel : ViewModel() {
-    private val _films = MutableStateFlow<List<Film>>(emptyList())
-    val films: StateFlow<List<Film>> = _films
     // Crear instancia de ApiService a través de retrofit.
     private val apiService: ApiService = ApiClient.retrofit.create(ApiService::class.java)
 
     // Crear el repositorio pasando la implementación de ApiService
     private val repository = FilmRepository(apiService)
+
+    private val _films = MutableStateFlow<List<Film>>(emptyList())
+    val films: StateFlow<List<Film>> = _films
+
+    private val _currentFilm = MutableStateFlow<Film?>(null)
+    // No se puede hacer con un getter porque devuelvo otro tipo.
+    val currentFilm: StateFlow<Film?> = _currentFilm
+
+    fun setCurrentFilm(newFilm: Film) {
+        _currentFilm.value = newFilm.copy()
+    }
 
     fun loadFilms() {
         viewModelScope.launch {
@@ -48,8 +57,8 @@ class FilmViewModel : ViewModel() {
             val result = repository.updateFilm(film)
             result.onSuccess {
                 onSuccess()
-                // Se puede hacer de otra manera más eficiente.
                 loadFilms()
+                _currentFilm.value = film.copy()
             }.onFailure { error ->
                 onError(error.message ?: "Error desconocido")
             }

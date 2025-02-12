@@ -38,7 +38,7 @@ import com.example.pruebacompose.viewmodel.FilmViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilmFormScreen(
-    viewModel: FilmViewModel = viewModel(), navController: NavController, film: Film? = null
+    viewModel: FilmViewModel, navController: NavController, film: Film? = null
 ) {
     var title by remember { mutableStateOf(film?.title ?: "") }
     var director by remember { mutableStateOf(film?.director ?: "") }
@@ -59,13 +59,14 @@ fun FilmFormScreen(
     }
 
     fun onSubmitForm() {
-        val filmCreate = FilmCreate(title = title,
-            director = director,
-            year = year.toInt(),
-            duration = duration.toInt(),
-            description = description,
-            posterPath = posterPath.takeIf { it.isNotBlank() })
         if (validate()) {
+            val filmCreate = FilmCreate(title = title,
+                director = director,
+                year = year.toInt(),
+                duration = duration.toInt(),
+                description = description,
+                posterPath = posterPath.takeIf { it.isNotBlank() })
+
             if (isEditing) {
                 // Puedo usar !! de manera segura porque si isEditing es true
                 // film no es nulo.
@@ -145,7 +146,8 @@ fun FilmFormScreen(
 fun EditFilmFormPreview() {
     FilmFormScreen(
         navController = rememberNavController(),
-        film = Film.example()
+        film = Film.example(),
+        viewModel = viewModel()
     )
 }
 
@@ -154,5 +156,6 @@ fun EditFilmFormPreview() {
 fun CreateFilmFormPreview() {
     FilmFormScreen(
         navController = rememberNavController(),
+        viewModel = viewModel()
     )
 }

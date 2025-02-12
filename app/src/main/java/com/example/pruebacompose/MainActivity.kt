@@ -6,17 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.pruebacompose.models.Film
-import com.example.pruebacompose.models.jsonToFilm
-import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmDetailScreen
+import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmListScreen
+import com.example.pruebacompose.viewmodel.FilmViewModel
 import kotlinx.serialization.json.Json
 
 class MainActivity : ComponentActivity() {
@@ -32,6 +31,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun FilmManagerApp() {
     val navController = rememberNavController()
+    // Evitar que haya varias instancias del viewModel pasando la misma manualmente a las pantallas.
+    val filmViewModel: FilmViewModel = viewModel()
     NavHost(navController, startDestination = "films") {
         composable("films") {
             // Antes lo hacia de esta manera, ahora no paso el viewModel a FilmListScreen
@@ -47,46 +48,29 @@ fun FilmManagerApp() {
             // de inyección.
             //val viewModel = FilmViewModel(repository)
 
-            FilmListScreen(navController) { film: Film ->
-                // Para pasar el objeto a la pantalla detalles existen varias formas:
-                // 1. Utilizar SharedViewModel.
-                // 2. Pasarlo como JSON.
-                // Por simplicidad voy a usar la última
-                // Importante, importar las dependencias:
-                // He buscado en kotlin ibraries: serialization
-                val filmJson = Json.encodeToString(film)
-                navController.navigate("filmDetail/$filmJson")
+            FilmListScreen(navController, viewModel = filmViewModel) { film: Film ->
+                filmViewModel.setCurrentFilm(film)
+                navController.navigate("filmDetail")
             }
         }
-        composable(
-            "filmDetail/{filmJson}",
-            arguments = listOf(navArgument("filmJson") { type = NavType.StringType })
-        ) { backStackEntry: NavBackStackEntry ->
-            // Obtener json de los argumentos de la ruta
-            val filmJson = backStackEntry.arguments?.getString("filmJson")
 
-            // Convertir string JSON a Film (requiere kotlin.serialization)
-            filmJson?.let {
-                //val film = Json.decodeFromString<Film>(it)
-                val film = jsonToFilm(it)
-                FilmDetailScreen(navController, film = film)
-            }
+        composable(
+            "filmDetail",
+        ) {
+            FilmDetailScreen(navController, viewModel = filmViewModel)
         }
 
         composable("editFilmForm/{filmJson}") { backStackEntry: NavBackStackEntry ->
             val filmJson = backStackEntry.arguments?.getString("filmJson")
             // Si el json no es nulo se transforma a Film.
             val film = filmJson?.let { Json.decodeFromString<Film>(it) }
-            FilmFormScreen(navController = navController, film = film)
+            FilmFormScreen(navController = navController, film = film, viewModel = filmViewModel)
         }
 
         composable("createFilmForm") {
-            FilmFormScreen(navController = navController)
+            FilmFormScreen(navController = navController, viewModel = filmViewModel)
         }
     }
-
-
-
 }
 
 @Preview

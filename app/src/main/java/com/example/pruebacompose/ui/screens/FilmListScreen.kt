@@ -36,7 +36,8 @@ fun FilmListScreen(
     // El valor por defecto utiliza la funcion viewModel() que automáticamente devuelve
     // una instancia de la clase indicada, o bien en el tipo genérico <> o en la definición
     // de la variable.
-    viewModel: FilmViewModel = viewModel(),
+    // Ya no utilizo viewModel(), lo paso manualmente.
+    viewModel: FilmViewModel,
     onFilmClick: (Film) -> Unit,
 ) {
     // Obtenemos la lista de películas desde el ViewModel.
@@ -95,7 +96,7 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun FilmListPreview() {
-    FilmListScreen(rememberNavController()) { }
+    FilmListScreen(rememberNavController(), viewModel()) { }
 }
 
 @Preview(showBackground = true)

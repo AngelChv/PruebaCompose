@@ -2,7 +2,6 @@ package com.example.pruebacompose.models
 
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
 // Utilizo @Serializable con json para pasar el objeto entre pantallas.
 // No es lo mismo que utilizo con gson para pasar los datos a la api.
@@ -32,8 +31,4 @@ data class Film(
             )
         }
     }
-}
-
-fun jsonToFilm(json: String): Film {
-    return Json.decodeFromString(json)
 }
