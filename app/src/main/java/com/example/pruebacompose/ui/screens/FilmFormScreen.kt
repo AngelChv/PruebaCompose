@@ -3,6 +3,7 @@ package com.example.pruebacompose.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -119,27 +120,38 @@ fun FilmFormScreen(
             item {
                 OutlinedTextField(value = title,
                     onValueChange = { title = it },
+                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    singleLine = true,
                     label = { Text("Título") })
                 OutlinedTextField(value = director,
                     onValueChange = { director = it },
+                    singleLine = true,
+                    modifier = Modifier.width(600.dp).fillMaxSize(),
                     label = { Text("Director") })
                 OutlinedTextField(
                     value = year,
+                    singleLine = true,
+                    modifier = Modifier.width(600.dp).fillMaxSize(),
                     onValueChange = { year = it },
                     label = { Text("Año") },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(
                     value = duration,
+                    singleLine = true,
+                    modifier = Modifier.width(600.dp).fillMaxSize(),
                     onValueChange = { duration = it },
                     label = { Text("Duración (min)") },
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(value = description,
                     onValueChange = { description = it },
+                    modifier = Modifier.width(600.dp).fillMaxSize(),
                     label = { Text("Descripción") })
                 OutlinedTextField(value = posterPath,
                     onValueChange = { posterPath = it },
+                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    singleLine = true,
                     label = { Text("URL del Poster (opcional)") })
 
                 errorMessage?.let { Text(it, color = Color.Red) }

@@ -3,16 +3,16 @@ package com.example.pruebacompose.repository
 import android.util.Log
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.models.FilmCreate
-import com.example.pruebacompose.network.ApiService
+import com.example.pruebacompose.service.FilmService
 
-class FilmRepository(private val apiService: ApiService) {
+class FilmRepository(private val filmService: FilmService) {
     suspend fun getFilms(): List<Film> {
-        return apiService.getFilms()
+        return filmService.getFilms()
     }
 
     suspend fun createFilm(film: FilmCreate): Result<Int> {
         return try {
-            val response = apiService.createFilm(film)
+            val response = filmService.createFilm(film)
             if (response.isSuccessful) {
                 Result.success(response.body() ?: -1)
             } else {
@@ -27,7 +27,7 @@ class FilmRepository(private val apiService: ApiService) {
 
     suspend fun updateFilm(film: Film): Result<Boolean> {
         return try {
-            val response = apiService.updateFilm(film)
+            val response = filmService.updateFilm(film)
             if (response.isSuccessful) {
                 Result.success(response.body() ?: false)
             } else {
@@ -42,7 +42,7 @@ class FilmRepository(private val apiService: ApiService) {
 
     suspend fun deleteFilm(filmId: Int): Result<Boolean> {
         return try {
-            val response = apiService.deleteFilm(filmId)
+            val response = filmService.deleteFilm(filmId)
             if (response.isSuccessful) {
                 Result.success(response.body() ?: false)
             } else {

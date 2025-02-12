@@ -15,7 +15,10 @@ import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.ui.screens.FilmDetailScreen
 import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmListScreen
+import com.example.pruebacompose.ui.screens.LoginScreen
+import com.example.pruebacompose.viewmodel.AuthViewModel
 import com.example.pruebacompose.viewmodel.FilmViewModel
+import com.example.pruebacompose.viewmodel.LoginViewModel
 import kotlinx.serialization.json.Json
 
 class MainActivity : ComponentActivity() {
@@ -33,7 +36,15 @@ fun MainNavHost() {
     val navController = rememberNavController()
     // Evitar que haya varias instancias del viewModel pasando la misma manualmente a las pantallas.
     val filmViewModel: FilmViewModel = viewModel()
-    NavHost(navController, startDestination = "films") {
+    val authViewModel: AuthViewModel = viewModel()
+    val loginViewModel = LoginViewModel(authViewModel)
+    NavHost(navController, startDestination = "login") {
+        composable("login") {
+            LoginScreen(loginViewModel) {
+                navController.navigate("films") { popUpTo("login") { inclusive = true } }
+            }
+        }
+
         composable("films") {
             // Antes lo hacia de esta manera, ahora no paso el viewModel a FilmListScreen
             // Si no que utiliza el valor por defecto de viewModel()

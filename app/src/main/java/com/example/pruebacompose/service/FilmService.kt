@@ -1,4 +1,4 @@
-package com.example.pruebacompose.network
+package com.example.pruebacompose.service
 
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.models.FilmCreate
@@ -10,7 +10,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface ApiService {
+interface FilmService {
     @GET("films/") // Endpoint de la API
     suspend fun getFilms(): List<Film>
 

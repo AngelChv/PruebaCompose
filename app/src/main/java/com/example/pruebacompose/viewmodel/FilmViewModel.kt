@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.models.FilmCreate
 import com.example.pruebacompose.network.ApiClient
-import com.example.pruebacompose.network.ApiService
+import com.example.pruebacompose.service.FilmService
 import com.example.pruebacompose.repository.FilmRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,10 +14,10 @@ import kotlinx.coroutines.launch
 
 class FilmViewModel : ViewModel() {
     // Crear instancia de ApiService a través de retrofit.
-    private val apiService: ApiService = ApiClient.retrofit.create(ApiService::class.java)
+    private val filmService: FilmService = ApiClient.retrofit.create(FilmService::class.java)
 
     // Crear el repositorio pasando la implementación de ApiService
-    private val repository = FilmRepository(apiService)
+    private val repository = FilmRepository(filmService)
 
     private val _films = MutableStateFlow<List<Film>>(emptyList())
     val films: StateFlow<List<Film>> = _films
