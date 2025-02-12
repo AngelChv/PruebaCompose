@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.viewmodel.FilmViewModel
+import kotlinx.serialization.json.Json
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,14 +79,7 @@ fun FilmDetailActions(
 ) {
     Row {
         IconButton(onClick = {
-            // Todo ir al formulario
-            vieModel.updateFilm(
-                film = film,
-                onSuccess = {},
-                onError = {
-                    // todo hacer snakbar con el mensaje.
-                }
-            )
+            navController.navigate("editFilmForm/${Json.encodeToString(film)}")
         }) {
             Icon(Icons.Default.Edit, "Editar")
         }

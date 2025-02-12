@@ -14,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.models.jsonToFilm
-import com.example.pruebacompose.ui.screens.AddFilmScreen
+import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmDetailScreen
 import com.example.pruebacompose.ui.screens.FilmListScreen
 import kotlinx.serialization.json.Json
@@ -73,10 +73,16 @@ fun FilmManagerApp() {
             }
         }
 
-        composable("addFilm") {
-            AddFilmScreen(navController = navController)
+        composable("editFilmForm/{filmJson}") { backStackEntry: NavBackStackEntry ->
+            val filmJson = backStackEntry.arguments?.getString("filmJson")
+            // Si el json no es nulo se transforma a Film.
+            val film = filmJson?.let { Json.decodeFromString<Film>(it) }
+            FilmFormScreen(navController = navController, film = film)
         }
 
+        composable("createFilmForm") {
+            FilmFormScreen(navController = navController)
+        }
     }
 
 

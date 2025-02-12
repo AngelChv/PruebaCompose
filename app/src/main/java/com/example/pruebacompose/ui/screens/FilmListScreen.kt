@@ -55,7 +55,7 @@ fun FilmListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate("addFilm") },
+                onClick = { navController.navigate("createFilmForm") },
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Añadir Película")
@@ -101,14 +101,5 @@ fun FilmListPreview() {
 @Preview(showBackground = true)
 @Composable
 fun FilmItemPreview() {
-    val film = Film(
-        id = 0,
-        title = "Título",
-        director = "Director",
-        year = 1999,
-        duration = 130,
-        description = "Descripción",
-        posterPath = "poster path"
-    )
-    FilmItem(film) { }
+    FilmItem(Film.example()) { }
 }

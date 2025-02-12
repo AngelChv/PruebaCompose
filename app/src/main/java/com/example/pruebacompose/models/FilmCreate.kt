@@ -15,4 +15,16 @@ data class FilmCreate(
     // Si el esquema de la api tiene un nombre distino es preciso indicarlo.
     @SerializedName("poster_path")
     val posterPath: String?,
-)
+) {
+    fun toFilm(id: Int): Film {
+        return Film(
+            id = id,
+            title = title,
+            director = director,
+            year = year,
+            duration = duration,
+            description = description,
+            posterPath = posterPath,
+        )
+    }
+}
