@@ -23,8 +23,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pruebacompose.core.navigation.BottomNavBar
 import com.example.pruebacompose.models.Film
+import com.example.pruebacompose.network.ApiClient
+import com.example.pruebacompose.repository.FilmRepository
+import com.example.pruebacompose.service.FilmService
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +39,7 @@ fun FilmListScreen(
     // Ya no utilizo viewModel(), lo paso manualmente.
     viewModel: FilmViewModel,
     navigateToCreateFilm: () -> Unit,
+    navigateToProfile: () -> Unit,
     onFilmClick: (Film) -> Unit,
 ) {
     // Obtenemos la lista de películas desde el ViewModel.
@@ -52,14 +56,19 @@ fun FilmListScreen(
                 title = { Text("Películas") }
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { navigateToCreateFilm() },
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Añadir Película")
-            }
-        },
+        bottomBar = {
+            BottomNavBar(
+                navigateToFilms = {},
+                navigateToProfile = navigateToProfile,
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { navigateToCreateFilm() },
+                    ) {
+                        Icon(Icons.Default.Add, contentDescription = "Añadir Película")
+                    }
+                },
+            )
+        }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             // Usamos el import correcto de items para iterar la lista de películas.
@@ -94,9 +103,13 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun FilmListPreview() {
-    val viewModel: FilmViewModel = viewModel()
+    val viewModel =
+        FilmViewModel(FilmRepository(ApiClient.retrofit.create(FilmService::class.java)))
     viewModel.setFilms(Film.listExample(10))
-    FilmListScreen(viewModel(), {}) { }
+    FilmListScreen(
+        viewModel, {},
+        navigateToProfile = {}
+    ) { }
 }
 
 @Preview(showBackground = true)

@@ -45,7 +45,9 @@ fun NavigationWrapper() {
         composable<Films> {
             FilmListScreen(
                 viewModel = filmViewModel,
-                navigateToCreateFilm = { navController.navigate(CreateFilmForm) }
+                navigateToCreateFilm = { navController.navigate(CreateFilmForm) },
+                //todo
+                navigateToProfile = {  },
             ) { film: Film ->
                 filmViewModel.setCurrentFilm(film)
                 navController.navigate(FilmDetail)
