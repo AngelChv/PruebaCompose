@@ -3,13 +3,13 @@ package com.example.pruebacompose.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +48,7 @@ fun ProfileScreen(
             )
         },
     ) { paddingValues: PaddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -56,43 +56,45 @@ fun ProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally, // Centrar contenido horizontalmente
             verticalArrangement = Arrangement.Center // Centrar contenido verticalmente
         ) {
-            // Círculo con la inicial del nombre
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(CircleShape) // Hacer el círculo
-                    .background(MaterialTheme.colorScheme.primary) // Color de fondo del círculo
-            ) {
+            item {
+                // Círculo con la inicial del nombre
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .clip(CircleShape) // Hacer el círculo
+                        .background(MaterialTheme.colorScheme.primary) // Color de fondo del círculo
+                ) {
+                    Text(
+                        text = userInitial,
+                        style = MaterialTheme.typography.displayLarge,
+                        color = MaterialTheme.colorScheme.background,
+                        modifier = Modifier.align(Alignment.Center) // Centrar la inicial dentro del círculo
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp)) // Espaciado entre el círculo y el texto
+
+                // Nombre completo
                 Text(
-                    text = userInitial,
-                    style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.background,
-                    modifier = Modifier.align(Alignment.Center) // Centrar la inicial dentro del círculo
+                    text = user.username,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
-            }
 
-            Spacer(modifier = Modifier.height(16.dp)) // Espaciado entre el círculo y el texto
+                // Correo electrónico
+                Text(
+                    text = user.email,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+                )
 
-            // Nombre completo
-            Text(
-                text = user.username,
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+                Spacer(modifier = Modifier.height(32.dp)) // Espaciado entre el correo y el botón de cierre de sesión
 
-            // Correo electrónico
-            Text(
-                text = user.email,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-            )
-
-            Spacer(modifier = Modifier.height(32.dp)) // Espaciado entre el correo y el botón de cierre de sesión
-
-            // Botón para cerrar sesión
-            Button(onClick = onLogout) {
-                Text(text = "Cerrar sesión")
+                // Botón para cerrar sesión
+                Button(onClick = onLogout) {
+                    Text(text = "Cerrar sesión")
+                }
             }
         }
     }
