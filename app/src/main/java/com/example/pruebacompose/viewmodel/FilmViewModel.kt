@@ -18,8 +18,8 @@ class FilmViewModel(private val repository: FilmRepository) : ViewModel() {
     // No se puede hacer con un getter porque devuelvo otro tipo.
     val currentFilm: StateFlow<Film?> = _currentFilm
 
-    fun setCurrentFilm(newFilm: Film) {
-        _currentFilm.value = newFilm.copy()
+    fun setCurrentFilm(newFilm: Film?) {
+        _currentFilm.value = newFilm
     }
 
     fun setFilms(films: List<Film>) {

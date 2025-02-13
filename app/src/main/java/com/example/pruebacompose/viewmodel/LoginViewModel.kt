@@ -48,13 +48,12 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     // todo: refactorizar
     fun login(username: String, password: String) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _errorMessage.value = null
-            if (_validate.value) {
+        if (_validate.value) {
+            viewModelScope.launch {
+                _isLoading.value = true
+                _errorMessage.value = null
                 val result = authRepository.login(UserLogin(username, password))
-                result.onSuccess {
-                    val user = result.getOrNull()
+                result.onSuccess { user ->
                     if (user != null) {
                         SessionManager.currentUser = user
                         _isLoggedIn.value = true
@@ -65,10 +64,9 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     _errorMessage.value = it.message ?: "Error desconocido"
                 }
                 _isLoading.value = false
-            } else {
-                _errorMessage.value = "El formulario no es correcto"
             }
-            _isLoading.value = false
+        } else {
+            _errorMessage.value = "El formulario no es correcto"
         }
     }
 }

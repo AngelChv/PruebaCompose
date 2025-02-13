@@ -32,16 +32,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.viewmodel.FilmViewModel
-import kotlinx.serialization.json.Json
 
 @Composable
 fun FilmDetailScreen(
-    navController: NavController,
-    viewModel: FilmViewModel
+    viewModel: FilmViewModel,
+    navigateBack: () -> Unit,
+    navigateToEditFilm: (Film) -> Unit,
 ) {
     val context = LocalContext.current
     val film by viewModel.currentFilm.collectAsState()
@@ -57,13 +55,11 @@ fun FilmDetailScreen(
             topBar = {
                 FilmDetailToolbar(
                     film = film,
-                    navController = navController,
-                    onEditClick = {
-                        navController.navigate("editFilmForm/${Json.encodeToString(film)}")
-                    },
+                    onEditClick = { navigateToEditFilm(film!!) },
                     onDeleteClick = {
                         showDialog = true
                     },
+                    navigateBack = navigateBack
                 )
             }
         ) { paddingValues: PaddingValues ->
@@ -85,7 +81,7 @@ fun FilmDetailScreen(
                     Toast.makeText(
                         context, "Película eliminada", Toast.LENGTH_SHORT,
                     ).show()
-                    navController.popBackStack()
+                    navigateBack()
                 },
                 onError = {
                     Toast.makeText(
@@ -102,14 +98,15 @@ fun FilmDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilmDetailToolbar(
-    film: Film?, navController: NavController,
+    film: Film?,
+    navigateBack: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     TopAppBar(
         title = { Text("Detalle de ${film!!.title}") },
         navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
+            IconButton(onClick = { navigateBack() }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
             }
         },
@@ -171,5 +168,5 @@ fun ConfirmDeleteFilmDialog(
 fun FilmDetailsPreview() {
     val viewModel: FilmViewModel = viewModel()
     viewModel.setCurrentFilm(Film.example())
-    FilmDetailScreen(navController = rememberNavController(), viewModel = viewModel)
+    FilmDetailScreen(viewModel = viewModel, {}, {})
 }

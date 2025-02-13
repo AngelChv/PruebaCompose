@@ -24,20 +24,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilmListScreen(
-    navController: NavController,
     // El valor por defecto utiliza la funcion viewModel() que automáticamente devuelve
     // una instancia de la clase indicada, o bien en el tipo genérico <> o en la definición
     // de la variable.
     // Ya no utilizo viewModel(), lo paso manualmente.
     viewModel: FilmViewModel,
+    navigateToCreateFilm: () -> Unit,
     onFilmClick: (Film) -> Unit,
 ) {
     // Obtenemos la lista de películas desde el ViewModel.
@@ -56,7 +54,7 @@ fun FilmListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate("createFilmForm") },
+                onClick = { navigateToCreateFilm() },
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Añadir Película")
@@ -98,7 +96,7 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
 fun FilmListPreview() {
     val viewModel: FilmViewModel = viewModel()
     viewModel.setFilms(Film.listExample(10))
-    FilmListScreen(rememberNavController(), viewModel()) { }
+    FilmListScreen(viewModel(), {}) { }
 }
 
 @Preview(showBackground = true)

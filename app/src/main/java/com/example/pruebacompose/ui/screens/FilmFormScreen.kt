@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,18 +30,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.models.FilmCreate
+import com.example.pruebacompose.network.ApiClient
+import com.example.pruebacompose.repository.FilmRepository
+import com.example.pruebacompose.service.FilmService
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilmFormScreen(
-    viewModel: FilmViewModel, navController: NavController, film: Film? = null
+    viewModel: FilmViewModel,
+    navigateBack: () -> Unit,
 ) {
+    val film by viewModel.currentFilm.collectAsState()
+
     var title by rememberSaveable { mutableStateOf(film?.title ?: "") }
     var director by rememberSaveable { mutableStateOf(film?.director ?: "") }
     var year by rememberSaveable { mutableStateOf("${film?.year ?: ""}") }
@@ -55,8 +59,9 @@ fun FilmFormScreen(
     }
 
     fun validate(): Boolean {
-        return title.isNotBlank() && director.isNotBlank() &&
-                description.isNotBlank() && validateInt(year) && validateInt(duration)
+        return title.isNotBlank() && director.isNotBlank() && description.isNotBlank() && validateInt(
+            year
+        ) && validateInt(duration)
     }
 
     fun onSubmitForm() {
@@ -72,11 +77,11 @@ fun FilmFormScreen(
                 // Puedo usar !! de manera segura porque si isEditing es true
                 // film no es nulo.
                 viewModel.updateFilm(filmCreate.toFilm(film!!.id),
-                    onSuccess = { navController.popBackStack() },
+                    onSuccess = { navigateBack() },
                     onError = { errorMessage = it })
             } else {
                 viewModel.createFilm(filmCreate,
-                    onSuccess = { navController.popBackStack() },
+                    onSuccess = { navigateBack() },
                     onError = { errorMessage = it })
             }
         } else {
@@ -94,7 +99,7 @@ fun FilmFormScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navigateBack() }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                     }
                 },
@@ -105,7 +110,7 @@ fun FilmFormScreen(
                 onClick = ::onSubmitForm, modifier = Modifier.padding(16.dp)
             ) {
                 if (isEditing) Icon(Icons.Default.Edit, contentDescription = "Editar")
-                else Icon(Icons.Default.Add, contentDescription = "Crear")
+                else Icon(Icons.Default.Check, contentDescription = "Crear")
             }
         },
     ) { paddingValues ->
@@ -120,18 +125,24 @@ fun FilmFormScreen(
             item {
                 OutlinedTextField(value = title,
                     onValueChange = { title = it },
-                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .width(600.dp)
+                        .fillMaxSize(),
                     singleLine = true,
                     label = { Text("Título") })
                 OutlinedTextField(value = director,
                     onValueChange = { director = it },
                     singleLine = true,
-                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .width(600.dp)
+                        .fillMaxSize(),
                     label = { Text("Director") })
                 OutlinedTextField(
                     value = year,
                     singleLine = true,
-                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .width(600.dp)
+                        .fillMaxSize(),
                     onValueChange = { year = it },
                     label = { Text("Año") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -139,18 +150,24 @@ fun FilmFormScreen(
                 OutlinedTextField(
                     value = duration,
                     singleLine = true,
-                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .width(600.dp)
+                        .fillMaxSize(),
                     onValueChange = { duration = it },
                     label = { Text("Duración (min)") },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                 )
                 OutlinedTextField(value = description,
                     onValueChange = { description = it },
-                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .width(600.dp)
+                        .fillMaxSize(),
                     label = { Text("Descripción") })
                 OutlinedTextField(value = posterPath,
                     onValueChange = { posterPath = it },
-                    modifier = Modifier.width(600.dp).fillMaxSize(),
+                    modifier = Modifier
+                        .width(600.dp)
+                        .fillMaxSize(),
                     singleLine = true,
                     label = { Text("URL del Poster (opcional)") })
 
@@ -164,18 +181,17 @@ fun FilmFormScreen(
 @Preview(showBackground = true)
 @Composable
 fun EditFilmFormPreview() {
+    val viewModel = FilmViewModel(FilmRepository(ApiClient.retrofit.create(FilmService::class.java)))
+    viewModel.setCurrentFilm(Film.example())
     FilmFormScreen(
-        navController = rememberNavController(),
-        film = Film.example(),
-        viewModel = viewModel()
-    )
+        viewModel = viewModel
+    ) {}
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CreateFilmFormPreview() {
     FilmFormScreen(
-        navController = rememberNavController(),
-        viewModel = viewModel()
-    )
+        viewModel = FilmViewModel(FilmRepository(ApiClient.retrofit.create(FilmService::class.java)))
+    ) {}
 }
