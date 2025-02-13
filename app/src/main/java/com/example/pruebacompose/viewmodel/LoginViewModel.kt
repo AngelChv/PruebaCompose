@@ -2,12 +2,14 @@ package com.example.pruebacompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.pruebacompose.auth.SessionManager
 import com.example.pruebacompose.models.UserLogin
+import com.example.pruebacompose.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val authVM: AuthViewModel) : ViewModel() {
+class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _username = MutableStateFlow("")
     val username: StateFlow<String> = _username
 
@@ -43,24 +45,25 @@ class LoginViewModel(private val authVM: AuthViewModel) : ViewModel() {
         return password.length > 6
     }
 
+
+    // todo: refactorizar
     fun login(username: String, password: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
             if (_validate.value) {
-                authVM.login(
-                    UserLogin(username, password),
-                    onSuccess = { isLoggedIn: Boolean ->
-                        if (isLoggedIn) {
-                            _isLoggedIn.value = true
-                        } else {
-                            _errorMessage.value = "Usuario o contraseña incorrectos"
-                        }
-                    },
-                    onError = {
-                        _errorMessage.value = it
-                    },
-                )
+                val result = authRepository.login(UserLogin(username, password))
+                result.onSuccess {
+                    val user = result.getOrNull()
+                    if (user != null) {
+                        SessionManager.currentUser = user
+                        _isLoggedIn.value = true
+                    } else {
+                        _errorMessage.value = "Usuario o contraseña incorrectos"
+                    }
+                }.onFailure {
+                    _errorMessage.value = it.message ?: "Error desconocido"
+                }
                 _isLoading.value = false
             } else {
                 _errorMessage.value = "El formulario no es correcto"

@@ -6,17 +6,20 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.models.Film
+import com.example.pruebacompose.network.ApiClient
+import com.example.pruebacompose.repository.AuthRepository
+import com.example.pruebacompose.repository.FilmRepository
+import com.example.pruebacompose.service.AuthService
+import com.example.pruebacompose.service.FilmService
 import com.example.pruebacompose.ui.screens.FilmDetailScreen
 import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmListScreen
 import com.example.pruebacompose.ui.screens.LoginScreen
-import com.example.pruebacompose.viewmodel.AuthViewModel
 import com.example.pruebacompose.viewmodel.FilmViewModel
 import com.example.pruebacompose.viewmodel.LoginViewModel
 import kotlinx.serialization.json.Json
@@ -34,10 +37,21 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainNavHost() {
     val navController = rememberNavController()
+
+    // Crear servicios:
+    val authService = ApiClient.retrofit.create(AuthService::class.java)
+    val filmService = ApiClient.retrofit.create(FilmService::class.java)
+
+    // Crear repositorios:
+    val authRepository = AuthRepository(authService)
+    val filmRepository = FilmRepository(filmService)
+
+    // Crear View Models:
     // Evitar que haya varias instancias del viewModel pasando la misma manualmente a las pantallas.
-    val filmViewModel: FilmViewModel = viewModel()
-    val authViewModel: AuthViewModel = viewModel()
-    val loginViewModel = LoginViewModel(authViewModel)
+    val loginViewModel = LoginViewModel(authRepository)
+    val filmViewModel = FilmViewModel(filmRepository)
+
+    // Crear anfitrión de navegación:
     NavHost(navController, startDestination = "login") {
         composable("login") {
             LoginScreen(loginViewModel) {

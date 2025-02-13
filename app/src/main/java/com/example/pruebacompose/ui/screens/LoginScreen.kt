@@ -22,8 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pruebacompose.R
-import com.example.pruebacompose.viewmodel.AuthViewModel
 import com.example.pruebacompose.viewmodel.LoginViewModel
 
 @Composable
@@ -131,9 +131,8 @@ fun LoginButton(enabled: Boolean, onClick: () -> Unit) {
 @Preview(showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    val authVM = AuthViewModel()
     LoginScreen(
-        LoginViewModel(authVM),
+        viewModel(),
         onLoginSuccess = {}
     )
 }
