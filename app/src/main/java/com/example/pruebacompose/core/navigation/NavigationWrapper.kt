@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.pruebacompose.auth.SessionManager
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.network.ApiClient
 import com.example.pruebacompose.repository.AuthRepository
@@ -14,6 +15,7 @@ import com.example.pruebacompose.ui.screens.FilmDetailScreen
 import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmListScreen
 import com.example.pruebacompose.ui.screens.LoginScreen
+import com.example.pruebacompose.ui.screens.ProfileScreen
 import com.example.pruebacompose.viewmodel.FilmViewModel
 import com.example.pruebacompose.viewmodel.LoginViewModel
 
@@ -46,8 +48,13 @@ fun NavigationWrapper() {
             FilmListScreen(
                 viewModel = filmViewModel,
                 navigateToCreateFilm = { navController.navigate(CreateFilmForm) },
-                //todo
-                navigateToProfile = {  },
+                navigateToProfile = {
+                    navController.navigate(Profile) {
+                        popUpTo<Films> {
+                            inclusive = true
+                        }
+                    }
+                },
             ) { film: Film ->
                 filmViewModel.setCurrentFilm(film)
                 navController.navigate(FilmDetail)
@@ -71,6 +78,26 @@ fun NavigationWrapper() {
         composable<CreateFilmForm> {
             filmViewModel.setCurrentFilm(null)
             FilmFormScreen(viewModel = filmViewModel) { navController.popBackStack() }
+        }
+
+        composable<Profile> {
+            ProfileScreen(
+                navigateToToFilms = {
+                    navController.navigate(Films) {
+                        popUpTo<Profile> {
+                            inclusive = true
+                        }
+                    }
+                },
+                navigateToCreateFilm = { navController.navigate(CreateFilmForm) }
+            ) {
+                SessionManager.currentUser = null
+                navController.navigate(Login) {
+                    popUpTo<Login> {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }

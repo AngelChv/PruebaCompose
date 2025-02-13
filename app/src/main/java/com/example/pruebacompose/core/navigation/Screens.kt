@@ -16,3 +16,6 @@ object CreateFilmForm
 
 @Serializable
 object EditFilmForm
+
+@Serializable
+object Profile

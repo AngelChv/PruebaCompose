@@ -5,17 +5,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pruebacompose.core.navigation.BottomNavBar
+import com.example.pruebacompose.core.ui.CreateFilmFab
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.network.ApiClient
 import com.example.pruebacompose.repository.FilmRepository
@@ -61,11 +58,7 @@ fun FilmListScreen(
                 navigateToFilms = {},
                 navigateToProfile = navigateToProfile,
                 floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { navigateToCreateFilm() },
-                    ) {
-                        Icon(Icons.Default.Add, contentDescription = "Añadir Película")
-                    }
+                    CreateFilmFab { navigateToCreateFilm() }
                 },
             )
         }

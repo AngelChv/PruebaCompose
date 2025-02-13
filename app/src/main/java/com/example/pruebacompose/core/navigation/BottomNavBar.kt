@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun BottomNavBar(
@@ -25,15 +26,17 @@ fun BottomNavBar(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                IconButton(onClick = navigateToFilms) {
+                IconButton(modifier = Modifier.size(56.dp), onClick = navigateToFilms) {
                     Icon(
                         Icons.Filled.Favorite,
+                        modifier = Modifier.padding(8.dp).fillMaxSize(),
                         contentDescription = "Films"
                     )
                 }
-                IconButton(onClick = navigateToProfile) {
+                IconButton(modifier = Modifier.size(56.dp), onClick = navigateToProfile) {
                     Icon(
                         Icons.Filled.Person,
+                        modifier = Modifier.padding(8.dp).fillMaxSize(),
                         contentDescription = "Profile",
                     )
                 }
