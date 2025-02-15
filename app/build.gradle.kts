@@ -93,4 +93,7 @@ dependencies {
 
     // Para descifrar el token
     implementation(libs.jwtdecode)
+
+    // Imágenes
+    implementation(libs.coil)
 }

@@ -1,5 +1,8 @@
 package com.example.pruebacompose.models
 
+import android.util.Log
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
@@ -18,6 +21,16 @@ data class Film(
     @SerializedName("poster_path")
     val posterPath: String?,
 ) {
+    fun defaultPoster(isDarkTheme: Boolean, backgroundColor: Color, textColor: Color): String {
+        val backgroundColorHex = Integer.toHexString(backgroundColor.toArgb()).removeRange(0,2)
+        val textColorHex = Integer.toHexString(textColor.toArgb()).removeRange(0,2)
+        Log.d("DefaultPoster", "Background color: $backgroundColorHex")
+        Log.d("DefaultPoster", "Text color: $textColorHex")
+        Log.d("DefaultPoster", "https://placehold.co/400x600/$backgroundColorHex/$textColorHex/jpg?text=$title")
+        return if (isDarkTheme) "https://placehold.co/400x600/$backgroundColorHex/$textColorHex/jpg?text=$title"
+        else "https://placehold.co/400x600/$backgroundColorHex/$textColorHex/jpg?text=$title"
+    }
+
     companion object {
         fun example(): Film {
             return Film(
@@ -27,7 +40,7 @@ data class Film(
                 year = 1999,
                 duration = 130,
                 description = "Descripción",
-                posterPath = "poster path"
+                posterPath = "https://placehold.co/1080x1920/EEE/31343C"
             )
         }
 
