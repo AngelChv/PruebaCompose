@@ -19,8 +19,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.core.navigation.BottomNavBar
-import com.example.pruebacompose.core.navigation.Films
 import com.example.pruebacompose.core.ui.CreateFilmFab
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.network.ApiClient
@@ -37,8 +37,8 @@ fun FilmListScreen(
     // de la variable.
     // Ya no utilizo viewModel(), lo paso manualmente.
     viewModel: FilmViewModel,
+    bottomNavBar: @Composable () -> Unit,
     navigateToCreateFilm: () -> Unit,
-    navigateToProfile: () -> Unit,
     onFilmClick: (Film) -> Unit,
 ) {
     // Obtenemos la lista de películas desde el ViewModel.
@@ -55,12 +55,7 @@ fun FilmListScreen(
                 title = { Text("Películas") }
             )
         },
-        bottomBar = {
-            BottomNavBar(
-                currentScreen = Films,
-                navigateToProfile = navigateToProfile,
-            )
-        },
+        bottomBar = bottomNavBar,
         floatingActionButton = { CreateFilmFab { navigateToCreateFilm() } }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
@@ -101,8 +96,9 @@ fun FilmListPreview() {
     viewModel.setFilms(Film.listExample(10))
     PruebaComposeTheme {
         FilmListScreen(
-            viewModel, {},
-            navigateToProfile = {}
+            viewModel = viewModel,
+            bottomNavBar = { BottomNavBar(rememberNavController()) },
+            navigateToCreateFilm = { },
         ) { }
     }
 }

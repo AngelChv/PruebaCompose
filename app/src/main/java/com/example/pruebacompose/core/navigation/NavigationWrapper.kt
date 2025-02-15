@@ -23,6 +23,8 @@ import com.example.pruebacompose.viewmodel.LoginViewModel
 fun NavigationWrapper() {
     val navController = rememberNavController()
 
+    val bottomNavBar = @Composable { BottomNavBar(navController) }
+
     // Crear servicios:
     val authService = ApiClient.retrofit.create(AuthService::class.java)
     val filmService = ApiClient.retrofit.create(FilmService::class.java)
@@ -48,13 +50,7 @@ fun NavigationWrapper() {
             FilmListScreen(
                 viewModel = filmViewModel,
                 navigateToCreateFilm = { navController.navigate(CreateFilmForm) },
-                navigateToProfile = {
-                    navController.navigate(Profile) {
-                        popUpTo<Films> {
-                            inclusive = true
-                        }
-                    }
-                },
+                bottomNavBar = bottomNavBar,
             ) { film: Film ->
                 filmViewModel.setCurrentFilm(film)
                 navController.navigate(FilmDetail)
@@ -82,13 +78,7 @@ fun NavigationWrapper() {
 
         composable<Profile> {
             ProfileScreen(
-                navigateToToFilms = {
-                    navController.navigate(Films) {
-                        popUpTo<Profile> {
-                            inclusive = true
-                        }
-                    }
-                },
+                bottomNavBar = bottomNavBar,
             ) {
                 SessionManager.currentUser = null
                 navController.navigate(Login) {

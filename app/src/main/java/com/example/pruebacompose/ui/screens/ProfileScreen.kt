@@ -22,14 +22,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pruebacompose.auth.SessionManager
-import com.example.pruebacompose.core.navigation.BottomNavBar
-import com.example.pruebacompose.core.navigation.Profile
 import com.example.pruebacompose.models.User
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 
 @Composable
 fun ProfileScreen(
-    navigateToToFilms: () -> Unit,
+    bottomNavBar: @Composable () -> Unit,
     onLogout: () -> Unit,
 ) {
     val user = SessionManager.currentUser ?: User(0, "Loading...", "Loading...", "")
@@ -37,12 +35,7 @@ fun ProfileScreen(
     val userInitial = user.username.take(1).uppercase()
 
     Scaffold(
-        bottomBar = {
-            BottomNavBar(
-                currentScreen = Profile,
-                navigateToFilms = navigateToToFilms,
-            )
-        },
+        bottomBar = bottomNavBar
     ) { paddingValues: PaddingValues ->
         LazyColumn(
             modifier = Modifier
