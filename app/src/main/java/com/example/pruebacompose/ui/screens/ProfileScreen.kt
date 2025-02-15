@@ -81,7 +81,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(32.dp)) // Espaciado entre el correo y el botón de cierre de sesión
 
                 // Botón para cerrar sesión
-                Button(onClick = onLogout) {
+                Button(onClick = { onLogout() }) {
                     Text(text = "Cerrar sesión")
                 }
             }

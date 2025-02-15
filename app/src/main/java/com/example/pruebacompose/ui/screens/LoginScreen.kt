@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +62,7 @@ fun Login(
     loginVM: LoginViewModel,
     onLoginSuccess: () -> Unit,
 ) {
+    val context = LocalContext.current
     val isLoggedIn by loginVM.isLoggedIn.collectAsState()
     val isLoading by loginVM.isLoading.collectAsState()
     val errorMessage by loginVM.errorMessage.collectAsState()
@@ -97,7 +99,7 @@ fun Login(
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
-                LoginButton(validate) { loginVM.login(username, password) }
+                LoginButton(validate) { loginVM.login(context, username, password) }
             }
         }
     }

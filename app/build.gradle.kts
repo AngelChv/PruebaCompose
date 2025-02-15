@@ -84,4 +84,13 @@ dependencies {
 
     // JSON
     implementation(libs.kotlinx.serialization.json)
+
+    // DataStore preferences.
+    implementation(libs.androidx.datastore.preferences)
+
+    // Para cifrar
+    implementation(libs.androidx.security.crypto)
+
+    // Para descifrar el token
+    implementation(libs.jwtdecode)
 }

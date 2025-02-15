@@ -1,5 +1,6 @@
 package com.example.pruebacompose.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pruebacompose.auth.SessionManager
@@ -47,7 +48,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
 
     // todo: refactorizar
-    fun login(username: String, password: String) {
+    fun login(context: Context, username: String, password: String) {
         if (_validate.value) {
             viewModelScope.launch {
                 _isLoading.value = true
@@ -55,7 +56,7 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 val result = authRepository.login(UserLogin(username, password))
                 result.onSuccess { user ->
                     if (user != null) {
-                        SessionManager.currentUser = user
+                        SessionManager.login(context, user)
                         _isLoggedIn.value = true
                     } else {
                         _errorMessage.value = "Usuario o contraseña incorrectos"

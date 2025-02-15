@@ -1,6 +1,8 @@
 package com.example.pruebacompose.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,13 +16,17 @@ import com.example.pruebacompose.service.FilmService
 import com.example.pruebacompose.ui.screens.FilmDetailScreen
 import com.example.pruebacompose.ui.screens.FilmFormScreen
 import com.example.pruebacompose.ui.screens.FilmListScreen
+import com.example.pruebacompose.ui.screens.LoadingScreen
 import com.example.pruebacompose.ui.screens.LoginScreen
 import com.example.pruebacompose.ui.screens.ProfileScreen
 import com.example.pruebacompose.viewmodel.FilmViewModel
 import com.example.pruebacompose.viewmodel.LoginViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun NavigationWrapper() {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     val navController = rememberNavController()
 
     val bottomNavBar = @Composable { BottomNavBar(navController) }
@@ -38,7 +44,30 @@ fun NavigationWrapper() {
     val filmViewModel = FilmViewModel(filmRepository)
 
     // Crear anfitrión de navegación:
-    NavHost(navController, startDestination = Login) {
+    NavHost(navController, startDestination = Loading) {
+        composable<Loading> {
+            LoadingScreen()
+            coroutineScope.launch {
+                SessionManager.loadSession(
+                    context = context,
+                    onError = {
+                        navController.navigate(Login) {
+                            popUpTo<Loading> {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    onSuccess = {
+                        navController.navigate(Films) {
+                            popUpTo<Loading> {
+                                inclusive = true
+                            }
+                        }
+                    },
+                )
+            }
+        }
+
         composable<Login> {
             LoginScreen(LoginViewModel(authRepository)) {
                 navController.navigate(Films) { popUpTo(Login) { inclusive = true } }
@@ -79,11 +108,13 @@ fun NavigationWrapper() {
             ProfileScreen(
                 bottomNavBar = bottomNavBar,
             ) {
-                SessionManager.currentUser = null
                 navController.navigate(Login) {
                     popUpTo<Profile> {
                         inclusive = true
                     }
+                }
+                coroutineScope.launch {
+                    SessionManager.logout(context)
                 }
             }
         }
