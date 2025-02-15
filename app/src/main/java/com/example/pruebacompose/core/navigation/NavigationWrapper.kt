@@ -35,13 +35,12 @@ fun NavigationWrapper() {
 
     // Crear View Models:
     // Evitar que haya varias instancias del viewModel pasando la misma manualmente a las pantallas.
-    val loginViewModel = LoginViewModel(authRepository)
     val filmViewModel = FilmViewModel(filmRepository)
 
     // Crear anfitrión de navegación:
     NavHost(navController, startDestination = Login) {
         composable<Login> {
-            LoginScreen(loginViewModel) {
+            LoginScreen(LoginViewModel(authRepository)) {
                 navController.navigate(Films) { popUpTo(Login) { inclusive = true } }
             }
         }
@@ -82,7 +81,7 @@ fun NavigationWrapper() {
             ) {
                 SessionManager.currentUser = null
                 navController.navigate(Login) {
-                    popUpTo<Login> {
+                    popUpTo<Profile> {
                         inclusive = true
                     }
                 }
