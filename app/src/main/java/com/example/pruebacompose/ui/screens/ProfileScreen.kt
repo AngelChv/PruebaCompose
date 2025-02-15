@@ -23,14 +23,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pruebacompose.auth.SessionManager
 import com.example.pruebacompose.core.navigation.BottomNavBar
-import com.example.pruebacompose.core.ui.CreateFilmFab
+import com.example.pruebacompose.core.navigation.Profile
 import com.example.pruebacompose.models.User
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 
 @Composable
 fun ProfileScreen(
     navigateToToFilms: () -> Unit,
-    navigateToCreateFilm: () -> Unit,
     onLogout: () -> Unit,
 ) {
     val user = SessionManager.currentUser ?: User(0, "Loading...", "Loading...", "")
@@ -40,11 +39,8 @@ fun ProfileScreen(
     Scaffold(
         bottomBar = {
             BottomNavBar(
+                currentScreen = Profile,
                 navigateToFilms = navigateToToFilms,
-                navigateToProfile = {},
-                floatingActionButton = {
-                    CreateFilmFab { navigateToCreateFilm() }
-                },
             )
         },
     ) { paddingValues: PaddingValues ->
@@ -104,6 +100,6 @@ fun ProfileScreen(
 @Composable
 fun ProfileScreenPreview() {
     PruebaComposeTheme {
-        ProfileScreen({}, {}) { }
+        ProfileScreen({}, {})
     }
 }

@@ -20,11 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pruebacompose.core.navigation.BottomNavBar
+import com.example.pruebacompose.core.navigation.Films
 import com.example.pruebacompose.core.ui.CreateFilmFab
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.network.ApiClient
 import com.example.pruebacompose.repository.FilmRepository
 import com.example.pruebacompose.service.FilmService
+import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,13 +57,11 @@ fun FilmListScreen(
         },
         bottomBar = {
             BottomNavBar(
-                navigateToFilms = {},
+                currentScreen = Films,
                 navigateToProfile = navigateToProfile,
-                floatingActionButton = {
-                    CreateFilmFab { navigateToCreateFilm() }
-                },
             )
-        }
+        },
+        floatingActionButton = { CreateFilmFab { navigateToCreateFilm() } }
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             // Usamos el import correcto de items para iterar la lista de películas.
@@ -99,14 +99,18 @@ fun FilmListPreview() {
     val viewModel =
         FilmViewModel(FilmRepository(ApiClient.retrofit.create(FilmService::class.java)))
     viewModel.setFilms(Film.listExample(10))
-    FilmListScreen(
-        viewModel, {},
-        navigateToProfile = {}
-    ) { }
+    PruebaComposeTheme {
+        FilmListScreen(
+            viewModel, {},
+            navigateToProfile = {}
+        ) { }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun FilmItemPreview() {
-    FilmItem(Film.example()) { }
+    PruebaComposeTheme {
+        FilmItem(Film.example()) { }
+    }
 }

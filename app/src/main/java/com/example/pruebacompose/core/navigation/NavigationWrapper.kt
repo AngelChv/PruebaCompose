@@ -89,7 +89,6 @@ fun NavigationWrapper() {
                         }
                     }
                 },
-                navigateToCreateFilm = { navController.navigate(CreateFilmForm) }
             ) {
                 SessionManager.currentUser = null
                 navController.navigate(Login) {
