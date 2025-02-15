@@ -1,6 +1,7 @@
 package com.example.pruebacompose.core.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -47,7 +48,7 @@ fun NavigationWrapper() {
     NavHost(navController, startDestination = Loading) {
         composable<Loading> {
             LoadingScreen()
-            coroutineScope.launch {
+            LaunchedEffect(Unit) {
                 SessionManager.loadSession(
                     context = context,
                     onError = {
