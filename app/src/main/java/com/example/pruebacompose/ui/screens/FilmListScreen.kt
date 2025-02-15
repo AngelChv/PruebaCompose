@@ -2,13 +2,16 @@ package com.example.pruebacompose.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -65,11 +68,18 @@ fun FilmListScreen(
         bottomBar = bottomNavBar,
         floatingActionButton = { CreateFilmFab { navigateToCreateFilm() } }
     ) { paddingValues ->
-        LazyColumn(modifier = Modifier.padding(paddingValues)) {
+        LazyVerticalGrid(
+            modifier = Modifier.padding(paddingValues),
+            columns = GridCells.Adaptive(minSize = 300.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
             // Usamos el import correcto de items para iterar la lista de películas.
-            items(films) { film ->
+            items(films.size) { index ->
                 FilmItem(
-                    film = film,
+                    modifier = Modifier.aspectRatio(9 / 10f),
+                    film = films[index],
                     onFilmClick = onFilmClick
                 )
             }
@@ -78,14 +88,12 @@ fun FilmListScreen(
 }
 
 @Composable
-fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
+fun FilmItem(modifier: Modifier, film: Film, onFilmClick: (Film) -> Unit) {
     val backgroundColor = MaterialTheme.colorScheme.surfaceVariant
     val textColor = MaterialTheme.colorScheme.onSurfaceVariant
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+    ElevatedCard(
+        modifier = modifier,
         onClick = { onFilmClick(film) },
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -98,8 +106,7 @@ fun FilmItem(film: Film, onFilmClick: (Film) -> Unit) {
                 contentDescription = "Poster de la película",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
+                    .fillMaxSize()
             )
 
             Box(
@@ -144,6 +151,6 @@ fun FilmListPreview() {
 @Composable
 fun FilmItemPreview() {
     PruebaComposeTheme {
-        FilmItem(Film.example()) { }
+        FilmItem(Modifier, Film.example()) { }
     }
 }
