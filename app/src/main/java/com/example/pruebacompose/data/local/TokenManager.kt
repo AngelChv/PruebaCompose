@@ -1,10 +1,11 @@
-package com.example.pruebacompose.network
+package com.example.pruebacompose.data.local
 
 import android.content.Context
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.auth0.android.jwt.JWT
-import com.example.pruebacompose.models.User
+import com.example.pruebacompose.domain.model.User
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 

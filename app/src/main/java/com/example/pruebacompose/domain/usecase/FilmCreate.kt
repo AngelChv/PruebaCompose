@@ -1,5 +1,6 @@
-package com.example.pruebacompose.models
+package com.example.pruebacompose.domain.usecase
 
+import com.example.pruebacompose.domain.model.Film
 import com.google.gson.annotations.SerializedName
 
 // No utilizo @Serializable, porque no necesito pasar el objeto entre pantallas, para eso uso

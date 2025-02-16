@@ -1,8 +1,8 @@
-package com.example.pruebacompose.service
+package com.example.pruebacompose.data.service
 
-import com.example.pruebacompose.models.User
-import com.example.pruebacompose.models.UserLogin
-import com.example.pruebacompose.models.UserRegister
+import com.example.pruebacompose.domain.model.User
+import com.example.pruebacompose.domain.usecase.UserLogin
+import com.example.pruebacompose.domain.usecase.UserRegister
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

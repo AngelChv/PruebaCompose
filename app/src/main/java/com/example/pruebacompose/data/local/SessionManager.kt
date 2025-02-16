@@ -1,8 +1,7 @@
-package com.example.pruebacompose.auth
+package com.example.pruebacompose.data.local
 
 import android.content.Context
-import com.example.pruebacompose.models.User
-import com.example.pruebacompose.network.TokenManager
+import com.example.pruebacompose.domain.model.User
 
 object SessionManager {
     var currentUser: User? = null

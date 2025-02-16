@@ -1,4 +1,4 @@
-package com.example.pruebacompose.models
+package com.example.pruebacompose.domain.usecase
 
 data class UserLogin(
     val username: String,

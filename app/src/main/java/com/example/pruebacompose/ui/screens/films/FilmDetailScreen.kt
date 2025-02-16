@@ -1,4 +1,4 @@
-package com.example.pruebacompose.ui.screens
+package com.example.pruebacompose.ui.screens.films
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -45,7 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import com.example.pruebacompose.models.Film
+import com.example.pruebacompose.domain.model.Film
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
 @Composable
@@ -84,6 +84,7 @@ fun FilmDetailScreen(
                             .fillMaxWidth()
                             .height(400.dp)
                     ) {
+                        // Poster
                         AsyncImage(
                             model = film!!.posterPath ?: film!!.defaultPoster(
                                 isSystemInDarkTheme(),
@@ -94,7 +95,7 @@ fun FilmDetailScreen(
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
-                        // Degradado de transparente a opaco (usando el color de superficie variante)
+                        // Degradado
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()

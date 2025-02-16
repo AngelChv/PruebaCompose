@@ -1,4 +1,4 @@
-package com.example.pruebacompose.ui.screens
+package com.example.pruebacompose.ui.screens.films
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -35,11 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.pruebacompose.core.navigation.BottomNavBar
-import com.example.pruebacompose.core.ui.CreateFilmFab
-import com.example.pruebacompose.models.Film
-import com.example.pruebacompose.network.ApiClient
-import com.example.pruebacompose.repository.FilmRepository
-import com.example.pruebacompose.service.FilmService
+import com.example.pruebacompose.ui.components.CreateFilmFab
+import com.example.pruebacompose.domain.model.Film
+import com.example.pruebacompose.data.remote.ApiClient
+import com.example.pruebacompose.data.repository.FilmRepository
+import com.example.pruebacompose.data.service.FilmService
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 import com.example.pruebacompose.viewmodel.FilmViewModel
 

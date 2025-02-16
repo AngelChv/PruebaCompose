@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.pruebacompose.models.Film
-import com.example.pruebacompose.models.FilmCreate
-import com.example.pruebacompose.repository.FilmRepository
+import com.example.pruebacompose.domain.model.Film
+import com.example.pruebacompose.domain.usecase.FilmCreate
+import com.example.pruebacompose.data.repository.FilmRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

@@ -1,9 +1,9 @@
-package com.example.pruebacompose.repository
+package com.example.pruebacompose.data.repository
 
 import android.util.Log
-import com.example.pruebacompose.models.Film
-import com.example.pruebacompose.models.FilmCreate
-import com.example.pruebacompose.service.FilmService
+import com.example.pruebacompose.domain.model.Film
+import com.example.pruebacompose.domain.usecase.FilmCreate
+import com.example.pruebacompose.data.service.FilmService
 
 class FilmRepository(private val filmService: FilmService) {
     suspend fun getFilms(): List<Film> {

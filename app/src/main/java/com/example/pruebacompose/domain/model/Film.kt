@@ -1,4 +1,4 @@
-package com.example.pruebacompose.models
+package com.example.pruebacompose.domain.model
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb

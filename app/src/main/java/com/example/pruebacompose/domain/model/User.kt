@@ -1,4 +1,4 @@
-package com.example.pruebacompose.models
+package com.example.pruebacompose.domain.model
 
 import kotlinx.serialization.Serializable
 

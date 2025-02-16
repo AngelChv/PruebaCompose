@@ -1,4 +1,4 @@
-package com.example.pruebacompose.network
+package com.example.pruebacompose.data.remote
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

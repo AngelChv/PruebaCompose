@@ -1,4 +1,4 @@
-package com.example.pruebacompose.core.ui
+package com.example.pruebacompose.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add

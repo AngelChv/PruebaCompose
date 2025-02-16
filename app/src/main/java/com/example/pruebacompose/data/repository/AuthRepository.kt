@@ -1,10 +1,10 @@
-package com.example.pruebacompose.repository
+package com.example.pruebacompose.data.repository
 
 import android.util.Log
-import com.example.pruebacompose.models.User
-import com.example.pruebacompose.models.UserLogin
-import com.example.pruebacompose.models.UserRegister
-import com.example.pruebacompose.service.AuthService
+import com.example.pruebacompose.domain.model.User
+import com.example.pruebacompose.domain.usecase.UserLogin
+import com.example.pruebacompose.domain.usecase.UserRegister
+import com.example.pruebacompose.data.service.AuthService
 
 class AuthRepository(private val service: AuthService) {
     suspend fun login(credentials: UserLogin): Result<User?> {

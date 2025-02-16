@@ -1,4 +1,4 @@
-package com.example.pruebacompose.ui.screens
+package com.example.pruebacompose.ui.screens.auth
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,13 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.pruebacompose.network.ApiClient
-import com.example.pruebacompose.repository.AuthRepository
-import com.example.pruebacompose.service.AuthService
+import com.example.pruebacompose.data.remote.ApiClient
+import com.example.pruebacompose.data.repository.AuthRepository
+import com.example.pruebacompose.data.service.AuthService
+import com.example.pruebacompose.ui.components.EmailField
+import com.example.pruebacompose.ui.components.EnableButton
+import com.example.pruebacompose.ui.components.HeaderImage
+import com.example.pruebacompose.ui.components.PasswordField
+import com.example.pruebacompose.ui.components.UsernameField
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 import com.example.pruebacompose.viewmodel.RegisterViewModel
 
@@ -132,32 +133,10 @@ fun Register(
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
-                RegisterButton(validate) { registerVM.register(username, email, password) }
+                EnableButton(validate) { registerVM.register(username, email, password) }
                 TextButton(navigateToLogin) { Text("¿Ya tienes una cuenta? Iniciar Sesión") }
             }
         }
-    }
-}
-
-@Composable
-fun EmailField(value: String, onValueChange: (String) -> Unit) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        singleLine = true,
-        maxLines = 1,
-        label = { Text("Correo electrónico") },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-    )
-}
-
-@Composable
-fun RegisterButton(enabled: Boolean, onClick: () -> Unit) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-    ) {
-        Text("Registrarse")
     }
 }
 

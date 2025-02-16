@@ -1,7 +1,7 @@
-package com.example.pruebacompose.service
+package com.example.pruebacompose.data.service
 
-import com.example.pruebacompose.models.Film
-import com.example.pruebacompose.models.FilmCreate
+import com.example.pruebacompose.domain.model.Film
+import com.example.pruebacompose.domain.usecase.FilmCreate
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE

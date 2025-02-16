@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.pruebacompose.auth.SessionManager
-import com.example.pruebacompose.models.UserLogin
-import com.example.pruebacompose.repository.AuthRepository
+import com.example.pruebacompose.data.local.SessionManager
+import com.example.pruebacompose.domain.usecase.UserLogin
+import com.example.pruebacompose.data.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

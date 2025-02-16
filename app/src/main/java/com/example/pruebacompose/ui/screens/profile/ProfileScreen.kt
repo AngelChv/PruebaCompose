@@ -1,4 +1,4 @@
-package com.example.pruebacompose.ui.screens
+package com.example.pruebacompose.ui.screens.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.pruebacompose.auth.SessionManager
-import com.example.pruebacompose.models.User
+import com.example.pruebacompose.data.local.SessionManager
+import com.example.pruebacompose.domain.model.User
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 
 @Composable

@@ -1,4 +1,4 @@
-package com.example.pruebacompose.ui.screens
+package com.example.pruebacompose.ui.screens.films
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,11 +30,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.pruebacompose.models.Film
-import com.example.pruebacompose.models.FilmCreate
-import com.example.pruebacompose.network.ApiClient
-import com.example.pruebacompose.repository.FilmRepository
-import com.example.pruebacompose.service.FilmService
+import com.example.pruebacompose.domain.model.Film
+import com.example.pruebacompose.domain.usecase.FilmCreate
+import com.example.pruebacompose.data.remote.ApiClient
+import com.example.pruebacompose.data.repository.FilmRepository
+import com.example.pruebacompose.data.service.FilmService
 import com.example.pruebacompose.viewmodel.FilmViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,6 +1,6 @@
-package com.example.pruebacompose.network
+package com.example.pruebacompose.data.remote
 
-import com.example.pruebacompose.auth.SessionManager
+import com.example.pruebacompose.data.local.SessionManager
 import okhttp3.Interceptor
 import okhttp3.Response
 
