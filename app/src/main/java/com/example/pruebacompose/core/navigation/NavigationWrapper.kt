@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,6 +22,7 @@ import com.example.pruebacompose.ui.screens.LoadingScreen
 import com.example.pruebacompose.ui.screens.LoginScreen
 import com.example.pruebacompose.ui.screens.ProfileScreen
 import com.example.pruebacompose.viewmodel.FilmViewModel
+import com.example.pruebacompose.viewmodel.FilmViewModelFactory
 import com.example.pruebacompose.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
@@ -42,7 +44,7 @@ fun NavigationWrapper() {
 
     // Crear View Models:
     // Evitar que haya varias instancias del viewModel pasando la misma manualmente a las pantallas.
-    val filmViewModel = FilmViewModel(filmRepository)
+    val filmViewModel: FilmViewModel = viewModel(factory = FilmViewModelFactory(filmRepository))
 
     // Crear anfitrión de navegación:
     NavHost(navController, startDestination = Loading) {

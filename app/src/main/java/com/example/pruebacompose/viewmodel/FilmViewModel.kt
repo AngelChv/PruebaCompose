@@ -2,6 +2,7 @@ package com.example.pruebacompose.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.pruebacompose.models.Film
 import com.example.pruebacompose.models.FilmCreate
@@ -72,5 +73,21 @@ class FilmViewModel(private val repository: FilmRepository) : ViewModel() {
                 onError(error.message ?: "Error desconocido")
             }
         }
+    }
+}
+
+// Es necesario cuando el viewmodel tiene parámetros.
+class FilmViewModelFactory(
+    private val filmRepository: FilmRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        // Si modelClass es asignable a FilmView model se devuelve como el tipo genérico.
+        if (modelClass.isAssignableFrom(FilmViewModel::class.java)) {
+            // No he encontrado otra forma
+            @Suppress("UNCHECKED_CAST")
+            return FilmViewModel(filmRepository) as T
+        }
+        // Si no es el ViewModel esperado se lanza una excepción.
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
