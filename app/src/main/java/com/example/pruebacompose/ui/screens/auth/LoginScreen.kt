@@ -120,7 +120,7 @@ fun Login(
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
-                EnableButton(validate) { loginVM.login(context, username, password) }
+                EnableButton("Iniciar Sesión", validate) { loginVM.login(context, username, password) }
                 TextButton(navigateToRegister) { Text("¿No tienes cuenta? Registrarse") }
             }
         }

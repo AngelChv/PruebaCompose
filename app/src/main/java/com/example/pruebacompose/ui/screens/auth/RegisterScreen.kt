@@ -133,7 +133,7 @@ fun Register(
             if (isLoading) {
                 CircularProgressIndicator()
             } else {
-                EnableButton(validate) { registerVM.register(username, email, password) }
+                EnableButton("Registrarse", validate) { registerVM.register(username, email, password) }
                 TextButton(navigateToLogin) { Text("¿Ya tienes una cuenta? Iniciar Sesión") }
             }
         }
