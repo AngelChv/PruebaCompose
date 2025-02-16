@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -25,6 +27,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pruebacompose.R
@@ -69,6 +73,7 @@ fun Login(
     val username by loginVM.username.collectAsState()
     val password by loginVM.password.collectAsState()
     val validate by loginVM.validate.collectAsState()
+    val isHidingPassword by loginVM.isHidingPassword.collectAsState()
 
     LaunchedEffect(isLoggedIn) {
         if (isLoggedIn) onLoginSuccess()
@@ -93,7 +98,10 @@ fun Login(
             UsernameField(username) { loginVM.onUserNameChange(it) }
         }
         item {
-            PasswordField(password) { loginVM.onPasswordChange(it) }
+            PasswordField(
+                password,
+                isHidingPassword,
+                { loginVM.toggleHidePassword() }) { loginVM.onPasswordChange(it) }
         }
         item {
             if (isLoading) {
@@ -125,13 +133,39 @@ fun UsernameField(value: String, onValueChange: (String) -> Unit) {
 }
 
 @Composable
-fun PasswordField(value: String, onValueChange: (String) -> Unit) {
+fun PasswordField(
+    value: String, isHidingPassword: Boolean,
+    onToggleHidePassword: () -> Unit,
+    onValueChange: (String) -> Unit,
+) {
+    val visualTransformation = if (isHidingPassword) PasswordVisualTransformation()
+    else VisualTransformation.None
+
+    @Composable
+    fun leadingIcon() = if (isHidingPassword) {
+        IconButton(onToggleHidePassword) {
+            Icon(
+                painter = painterResource(R.drawable.eye_24),
+                "Show password"
+            )
+        }
+    } else {
+        IconButton(onToggleHidePassword) {
+            Icon(
+                painter = painterResource(R.drawable.hide_eye_black_24),
+                "Hide password"
+            )
+        }
+    }
+
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
         maxLines = 1,
         label = { Text("Contraseña") },
+        trailingIcon = { leadingIcon() },
+        visualTransformation = visualTransformation,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
     )
 }

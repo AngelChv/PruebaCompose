@@ -29,8 +29,12 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn
 
+    private val _isHidingPassword = MutableStateFlow(true)
+    val isHidingPassword: StateFlow<Boolean> = _isHidingPassword
+
     fun onUserNameChange(username: String) {
         _username.value = username
+        validate()
     }
 
     fun onPasswordChange(password: String) {
@@ -38,16 +42,22 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         validate()
     }
 
+    fun toggleHidePassword() {
+        _isHidingPassword.value = !_isHidingPassword.value
+    }
+
     private fun validate() {
-        _validate.value = isValidPassword(_password.value)
+        _validate.value = isValidPassword(_password.value) && isValidUserName(_username.value)
     }
 
     private fun isValidPassword(password: String): Boolean {
         return password.length > 6
     }
 
+    private fun isValidUserName(username: String): Boolean {
+        return username.isNotBlank()
+    }
 
-    // todo: refactorizar
     fun login(context: Context, username: String, password: String) {
         if (_validate.value) {
             viewModelScope.launch {
