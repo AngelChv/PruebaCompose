@@ -94,7 +94,9 @@ fun NavigationWrapper() {
 
         composable<FilmDetail> {
             FilmDetailScreen(viewModel = filmViewModel,
-                navigateBack = { navController.popBackStack() },
+                // Si usaba popBackStack y pulsaba rapido el botón de ir hacia atrás dos veces
+                // la aplicación se bloqueaba.
+                navigateBack = { navController.navigateUp() },
                 navigateToEditFilm = {
                     filmViewModel.setCurrentFilm(it)
                     navController.navigate(EditFilmForm)

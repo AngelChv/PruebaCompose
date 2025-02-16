@@ -2,6 +2,7 @@ package com.example.pruebacompose.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -62,16 +63,15 @@ fun FilmDetailScreen(
             Text("No se ha seleccionado ninguna película")
         }
     } else {
-        Scaffold(
-            topBar = {
-                FilmDetailToolbar(
-                    film = film,
-                    navigateBack = navigateBack,
-                    onEditClick = { navigateToEditFilm(film!!) },
-                    onDeleteClick = { showDialog = true }
-                )
-            }
-        ) { paddingValues ->
+        val backgroundColor = MaterialTheme.colorScheme.background
+        val textColor = MaterialTheme.colorScheme.onBackground
+
+        Scaffold(topBar = {
+            FilmDetailToolbar(film = film,
+                navigateBack = navigateBack,
+                onEditClick = { navigateToEditFilm(film!!) },
+                onDeleteClick = { showDialog = true })
+        }) { paddingValues ->
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -85,7 +85,11 @@ fun FilmDetailScreen(
                             .height(400.dp)
                     ) {
                         AsyncImage(
-                            model = film!!.posterPath,
+                            model = film!!.posterPath ?: film!!.defaultPoster(
+                                isSystemInDarkTheme(),
+                                backgroundColor = backgroundColor,
+                                textColor = textColor,
+                            ),
                             contentDescription = "Póster de ${film!!.title}",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
@@ -98,14 +102,16 @@ fun FilmDetailScreen(
                                 .align(Alignment.BottomCenter)
                                 .background(
                                     Brush.verticalGradient(
-                                        colors = listOf(Color.Transparent, MaterialTheme.colorScheme.surfaceVariant)
+                                        colors = listOf(
+                                            Color.Transparent, MaterialTheme.colorScheme.background
+                                        )
                                     )
                                 )
                         )
                         // Título de la película sobre el degradado
                         Text(
                             text = film!!.title,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
@@ -144,21 +150,14 @@ fun FilmDetailScreen(
                 }
             }
         }
-        ConfirmDeleteFilmDialog(
-            showDialog = showDialog,
-            onDismissClick = { showDialog = false }
-        ) {
+        ConfirmDeleteFilmDialog(showDialog = showDialog, onDismissClick = { showDialog = false }) {
             showDialog = false
-            viewModel.deleteFilm(
-                filmId = film!!.id,
-                onSuccess = {
-                    Toast.makeText(context, "Película eliminada", Toast.LENGTH_SHORT).show()
-                    navigateBack()
-                },
-                onError = {
-                    Toast.makeText(context, "Error al eliminar la película", Toast.LENGTH_SHORT).show()
-                }
-            )
+            viewModel.deleteFilm(filmId = film!!.id, onSuccess = {
+                Toast.makeText(context, "Película eliminada", Toast.LENGTH_SHORT).show()
+                navigateBack()
+            }, onError = {
+                Toast.makeText(context, "Error al eliminar la película", Toast.LENGTH_SHORT).show()
+            })
         }
     }
 }
@@ -169,34 +168,29 @@ fun FilmDetailToolbar(
     film: Film?,
     navigateBack: () -> Unit,
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text = "Detalle de ${film?.title ?: ""}",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = { navigateBack() }) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
-            }
-        },
-        actions = {
-            FilmDetailActions(
-                onEditClick = onEditClick,
-                onDeleteClick = onDeleteClick
-            )
+    TopAppBar(title = {
+        Text(
+            text = film?.title ?: "",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }, navigationIcon = {
+        IconButton(onClick = { navigateBack() }) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
         }
-    )
+    }, actions = {
+        FilmDetailActions(
+            onEditClick = onEditClick, onDeleteClick = onDeleteClick
+        )
+    })
 }
 
 @Composable
 fun FilmDetailActions(
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
 ) {
     Row {
         EditFilmButton(onEditClick)
@@ -225,8 +219,7 @@ fun ConfirmDeleteFilmDialog(
     onConfirmClick: () -> Unit,
 ) {
     if (showDialog) {
-        AlertDialog(
-            title = { Text("¿Desea eliminar la película?") },
+        AlertDialog(title = { Text("¿Desea eliminar la película?") },
             onDismissRequest = onDismissClick,
             confirmButton = {
                 TextButton(onClick = onConfirmClick) {
@@ -237,8 +230,7 @@ fun ConfirmDeleteFilmDialog(
                 TextButton(onClick = onDismissClick) {
                     Text("Cancelar")
                 }
-            }
-        )
+            })
     }
 }
 

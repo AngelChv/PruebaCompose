@@ -1,6 +1,5 @@
 package com.example.pruebacompose.models
 
-import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.google.gson.annotations.SerializedName
@@ -24,9 +23,6 @@ data class Film(
     fun defaultPoster(isDarkTheme: Boolean, backgroundColor: Color, textColor: Color): String {
         val backgroundColorHex = Integer.toHexString(backgroundColor.toArgb()).removeRange(0,2)
         val textColorHex = Integer.toHexString(textColor.toArgb()).removeRange(0,2)
-        Log.d("DefaultPoster", "Background color: $backgroundColorHex")
-        Log.d("DefaultPoster", "Text color: $textColorHex")
-        Log.d("DefaultPoster", "https://placehold.co/400x600/$backgroundColorHex/$textColorHex/jpg?text=$title")
         return if (isDarkTheme) "https://placehold.co/400x600/$backgroundColorHex/$textColorHex/jpg?text=$title"
         else "https://placehold.co/400x600/$backgroundColorHex/$textColorHex/jpg?text=$title"
     }
