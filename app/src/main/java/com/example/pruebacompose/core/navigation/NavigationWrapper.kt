@@ -24,6 +24,7 @@ import com.example.pruebacompose.ui.screens.ProfileScreen
 import com.example.pruebacompose.viewmodel.FilmViewModel
 import com.example.pruebacompose.viewmodel.FilmViewModelFactory
 import com.example.pruebacompose.viewmodel.LoginViewModel
+import com.example.pruebacompose.viewmodel.LoginViewModelFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,7 +73,10 @@ fun NavigationWrapper() {
         }
 
         composable<Login> {
-            LoginScreen(LoginViewModel(authRepository)) {
+            val loginViewModel: LoginViewModel = viewModel(
+                factory = LoginViewModelFactory(authRepository)
+            )
+            LoginScreen(loginViewModel) {
                 navController.navigate(Films) { popUpTo(Login) { inclusive = true } }
             }
         }

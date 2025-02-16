@@ -2,6 +2,7 @@ package com.example.pruebacompose.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.pruebacompose.auth.SessionManager
 import com.example.pruebacompose.models.UserLogin
@@ -79,5 +80,18 @@ class LoginViewModel(private val authRepository: AuthRepository) : ViewModel() {
         } else {
             _errorMessage.value = "El formulario no es correcto"
         }
+    }
+}
+
+// Es necesario cuando el viewmodel tiene parámetros.
+class LoginViewModelFactory(
+    private val authRepository: AuthRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return LoginViewModel(authRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
