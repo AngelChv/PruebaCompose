@@ -1,13 +1,10 @@
 package com.example.pruebacompose.ui.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,11 +18,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -70,7 +64,7 @@ fun FilmListScreen(
     ) { paddingValues ->
         LazyVerticalGrid(
             modifier = Modifier.padding(paddingValues),
-            columns = GridCells.Adaptive(minSize = 300.dp),
+            columns = GridCells.Adaptive(minSize = 150.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -78,7 +72,7 @@ fun FilmListScreen(
             // Usamos el import correcto de items para iterar la lista de películas.
             items(films.size) { index ->
                 FilmItem(
-                    modifier = Modifier.aspectRatio(9 / 10f),
+                    modifier = Modifier.aspectRatio(2 / 3f),
                     film = films[index],
                     onFilmClick = onFilmClick
                 )
@@ -96,38 +90,17 @@ fun FilmItem(modifier: Modifier, film: Film, onFilmClick: (Film) -> Unit) {
         modifier = modifier,
         onClick = { onFilmClick(film) },
     ) {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            AsyncImage(
-                model = film.posterPath ?: film.defaultPoster(
-                    isSystemInDarkTheme(),
-                    backgroundColor = backgroundColor,
-                    textColor = textColor,
-                ),
-                contentDescription = "Poster de la película",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
-            )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(backgroundColor)
-            ) {
-                Text(
-                    text = film.title,
-                    color = textColor,
-                    style = MaterialTheme.typography.headlineMedium.copy(
-                        fontWeight = FontWeight.Bold
-                    ),
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(16.dp)
-                )
-            }
-        }
+        AsyncImage(
+            model = film.posterPath ?: film.defaultPoster(
+                isSystemInDarkTheme(),
+                backgroundColor = backgroundColor,
+                textColor = textColor,
+            ),
+            contentDescription = "Poster de la película",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+        )
     }
 }
 
