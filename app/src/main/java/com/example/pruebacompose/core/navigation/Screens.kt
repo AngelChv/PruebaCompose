@@ -10,6 +10,9 @@ import kotlinx.serialization.Serializable
 object Loading
 
 @Serializable
+object Register
+
+@Serializable
 object Login
 
 @Serializable

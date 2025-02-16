@@ -10,12 +10,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pruebacompose.R
@@ -38,12 +42,27 @@ import com.example.pruebacompose.service.AuthService
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 import com.example.pruebacompose.viewmodel.LoginViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     loginVM: LoginViewModel,
-    onLoginSuccess: () -> Unit,
+    navigateToRegister: () -> Unit = {},
+    onLoginSuccess: () -> Unit = {},
 ) {
-    Scaffold { paddingValues: PaddingValues ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        "Inicio de Sesión",
+                        Modifier.fillMaxSize(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                }
+            )
+        }
+    ) { paddingValues: PaddingValues ->
         Box(
             Modifier
                 .padding(paddingValues)
@@ -54,6 +73,7 @@ fun LoginScreen(
                 modifier = Modifier
                     .align(Alignment.Center),
                 loginVM,
+                navigateToRegister,
                 onLoginSuccess,
             )
         }
@@ -64,7 +84,8 @@ fun LoginScreen(
 fun Login(
     modifier: Modifier,
     loginVM: LoginViewModel,
-    onLoginSuccess: () -> Unit,
+    navigateToRegister: () -> Unit = {},
+    onLoginSuccess: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val isLoggedIn by loginVM.isLoggedIn.collectAsState()
@@ -108,6 +129,7 @@ fun Login(
                 CircularProgressIndicator()
             } else {
                 LoginButton(validate) { loginVM.login(context, username, password) }
+                TextButton(navigateToRegister) { Text("¿No tienes cuenta? Registrarse") }
             }
         }
     }
@@ -188,7 +210,6 @@ fun LoginScreenPreview() {
     PruebaComposeTheme {
         LoginScreen(
             viewModel,
-            onLoginSuccess = {}
         )
     }
 }

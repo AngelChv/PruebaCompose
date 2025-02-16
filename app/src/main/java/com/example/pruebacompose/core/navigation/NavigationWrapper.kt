@@ -21,10 +21,13 @@ import com.example.pruebacompose.ui.screens.FilmListScreen
 import com.example.pruebacompose.ui.screens.LoadingScreen
 import com.example.pruebacompose.ui.screens.LoginScreen
 import com.example.pruebacompose.ui.screens.ProfileScreen
+import com.example.pruebacompose.ui.screens.RegisterScreen
 import com.example.pruebacompose.viewmodel.FilmViewModel
 import com.example.pruebacompose.viewmodel.FilmViewModelFactory
 import com.example.pruebacompose.viewmodel.LoginViewModel
 import com.example.pruebacompose.viewmodel.LoginViewModelFactory
+import com.example.pruebacompose.viewmodel.RegisterViewModel
+import com.example.pruebacompose.viewmodel.RegisterViewModelFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -76,8 +79,27 @@ fun NavigationWrapper() {
             val loginViewModel: LoginViewModel = viewModel(
                 factory = LoginViewModelFactory(authRepository)
             )
-            LoginScreen(loginViewModel) {
+            LoginScreen(
+                loginViewModel,
+                navigateToRegister = {
+                    navController.navigate(Register)
+                },
+            ) {
                 navController.navigate(Films) { popUpTo(Login) { inclusive = true } }
+            }
+        }
+
+        composable<Register> {
+            val registerViewModel: RegisterViewModel = viewModel(
+                factory = RegisterViewModelFactory(authRepository)
+            )
+            RegisterScreen(
+                registerViewModel,
+                navigateToLogin = {
+                    navController.navigateUp()
+                }
+            ) {
+                navController.navigateUp()
             }
         }
 
