@@ -30,6 +30,12 @@ import com.example.pruebacompose.viewmodel.RegisterViewModel
 import com.example.pruebacompose.viewmodel.RegisterViewModelFactory
 import kotlinx.coroutines.launch
 
+/**
+ * Gestiona toda la navegación de la app.
+ *
+ * Crea la estructura de pantallas y como se navega entre ellas.
+ * Instancia los servicios, repositorios y viewmodels para unificarlos en toda la aplicación.
+ */
 @Composable
 fun NavigationWrapper() {
     val coroutineScope = rememberCoroutineScope()

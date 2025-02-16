@@ -12,7 +12,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.pruebacompose.ui.theme.PruebaComposeTheme
 
-
+/**
+ *  Barra de navegación inferior de la aplicación.
+ *
+ *  @param navController Controlador de navegación a usar.
+ */
 @Composable
 fun BottomNavBar(
     navController: NavController,

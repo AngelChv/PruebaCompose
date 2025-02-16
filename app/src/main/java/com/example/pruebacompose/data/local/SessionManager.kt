@@ -3,6 +3,11 @@ package com.example.pruebacompose.data.local
 import android.content.Context
 import com.example.pruebacompose.domain.model.User
 
+/**
+ * Singleton encargado de gestionar la sesión del usuario actual.
+ *
+ * Maneja la carga de la sesión al abrir la aplicación, el inicio de sesión y el cierre de sesión.
+ */
 object SessionManager {
     var currentUser: User? = null
 

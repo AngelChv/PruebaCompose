@@ -5,11 +5,29 @@ import com.example.pruebacompose.domain.model.Film
 import com.example.pruebacompose.domain.usecase.FilmCreate
 import com.example.pruebacompose.data.service.FilmService
 
+/**
+ * Repositorio para gestionar las películas en la aplicación.
+ * Se encarga de realizar operaciones CRUD (crear, leer, actualizar y eliminar)
+ * mediante el servicio de películas.
+ *
+ * @property filmService Servicio de películas para interactuar con la API.
+ */
 class FilmRepository(private val filmService: FilmService) {
+    /**
+     * Obtiene la lista de películas disponibles.
+     *
+     * @return Lista de películas obtenidas de la API.
+     */
     suspend fun getFilms(): List<Film> {
         return filmService.getFilms()
     }
 
+    /**
+     * Crea una nueva película en la base de datos.
+     *
+     * @param film Objeto con los datos de la película a crear.
+     * @return [Result] con el ID de la película creada si la operación es exitosa, o un error en caso contrario.
+     */
     suspend fun createFilm(film: FilmCreate): Result<Int> {
         return try {
             val response = filmService.createFilm(film)
@@ -25,6 +43,12 @@ class FilmRepository(private val filmService: FilmService) {
         }
     }
 
+    /**
+    * Actualiza la información de una película existente.
+    *
+    * @param film Objeto con los datos actualizados de la película.
+    * @return [Result] con `true` si la operación es exitosa, o un error en caso contrario.
+    */
     suspend fun updateFilm(film: Film): Result<Boolean> {
         return try {
             val response = filmService.updateFilm(film)
@@ -40,6 +64,12 @@ class FilmRepository(private val filmService: FilmService) {
         }
     }
 
+    /**
+     * Elimina una película de la base de datos.
+     *
+     * @param filmId ID de la película a eliminar.
+     * @return [Result] con `true` si la operación es exitosa, o un error en caso contrario.
+     */
     suspend fun deleteFilm(filmId: Int): Result<Boolean> {
         return try {
             val response = filmService.deleteFilm(filmId)

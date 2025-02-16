@@ -32,6 +32,9 @@ object Profile
 
 data class TopLevelRoute<T : Any>(val name: String, val route: T, val icon: ImageVector)
 
+/**
+ * Rutas raíz de la aplicación
+ */
 val topLevelRoutes = listOf(
     TopLevelRoute("Films", Films, Icons.Filled.Favorite),
     TopLevelRoute("Profile", Profile, Icons.Filled.Person)
